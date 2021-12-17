@@ -72,6 +72,7 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 * @throws BeansException in case of loading or parsing errors
 	 */
 	public XmlBeanFactory(Resource resource) throws BeansException {
+		// 调用public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory)
 		this(resource, null);
 	}
 
@@ -83,6 +84,7 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 * @throws BeansException in case of loading or parsing errors
 	 */
 	public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
+		// parentBeanFactory为父类BeanFactory用于Factory合并 可以为空
 		super(parentBeanFactory);
 		// XmlBeanDefinitionReader是AbstractBeanDefinitionReader的子类
 		// 将resouece给XmlBeanDefinitionReader的loadBeanDefinitions方法

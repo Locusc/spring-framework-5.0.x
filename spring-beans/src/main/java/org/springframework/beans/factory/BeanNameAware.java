@@ -23,7 +23,13 @@ package org.springframework.beans.factory;
  * brittle dependence on external configuration, as well as a possibly
  * unnecessary dependence on a Spring API.
  *
+ * 接口将由希望了解其特性的bean实现, bean工厂中的bean名称。请注意, 通常不建议这样做
+ * 一个对象依赖于它的bean名, 因为它代表一个潜在的对外部配置的脆弱依赖
+ * 以及对SpringAPI不必要的依赖。
+ *
  * <p>For a list of all bean lifecycle methods, see the
+ * {@link BeanFactory BeanFactory javadocs}.
+ * 有关所有bean生命周期方法的列表，请参见
  * {@link BeanFactory BeanFactory javadocs}.
  *
  * @author Juergen Hoeller
@@ -46,6 +52,14 @@ public interface BeanNameAware extends Aware {
 	 * names, the actual bean name might have been made unique through appending
 	 * "#..." suffixes. Use the {@link BeanFactoryUtils#originalBeanName(String)}
 	 * method to extract the original bean name (without suffix), if desired.
+	 *
+	 * 在创建这个bean的bean工厂中设置bean的名称。在填充普通bean属性之后但在初始化回调之前,
+	 * 如{@link InitializingBean#afterPropertiesSet()}
+	 * 或者自定义init方法@param name工厂中bean的名称。
+	 * 请注意, 此名称是工厂中使用的实际bean名称, 可能
+	 * 与最初指定的名称不同: 特别是对于内部bean名称, 实际的bean名称可能通过附加“#…”而变得唯一后缀。
+	 * 使用{@link BeanFactoryUtils#originalBeanName(String)}
+	 * 方法提取原始bean名称（不带后缀）, 如果需要。
 	 */
 	void setBeanName(String name);
 

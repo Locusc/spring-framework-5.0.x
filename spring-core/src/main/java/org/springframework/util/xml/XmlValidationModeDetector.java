@@ -94,14 +94,18 @@ public class XmlValidationModeDetector {
 			boolean isDtdValidated = false;
 			String content;
 			while ((content = reader.readLine()) != null) {
+				// 如果读取的行是空或者注释则掠过
 				content = consumeCommentTokens(content);
 				if (this.inComment || !StringUtils.hasText(content)) {
 					continue;
 				}
+				// Spring用来检测验证模式的办法就是判断包含DOCTYPE
+				// 如果包含就是DTD 否则就是XSD
 				if (hasDoctype(content)) {
 					isDtdValidated = true;
 					break;
 				}
+				// 读取到<开始符号, 验证模式一定会在开始符号之前
 				if (hasOpeningTag(content)) {
 					// End of meaningful data...
 					break;

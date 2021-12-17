@@ -21,8 +21,10 @@ import java.io.InputStream;
 
 /**
  * Simple interface for objects that are sources for an {@link InputStream}.
+ * 作为{@link InputStream}源的对象的简单接口。
  *
  * <p>This is the base interface for Spring's more extensive {@link Resource} interface.
+ * 这是Spring更广泛的{@link Resource}接口的基本接口。
  *
  * <p>For single-use streams, {@link InputStreamResource} can be used for any
  * given {@code InputStream}. Spring's {@link ByteArrayResource} or any
@@ -30,6 +32,10 @@ import java.io.InputStream;
  * instance, allowing one to read the underlying content stream multiple times.
  * This makes this interface useful as an abstract content source for mail
  * attachments, for example.
+ *
+ * InputStreamSource封装任何能返回InputStream的类
+ * 比如File, Classpath下的资源和ByteArray等。
+ * 它只有一个方法定义:getInputStream(), 该方法返回一个新的InputStream对象
  *
  * @author Juergen Hoeller
  * @since 20.01.2004

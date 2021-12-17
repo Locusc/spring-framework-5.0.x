@@ -34,6 +34,14 @@ import org.springframework.lang.Nullable;
  * physical form, but a URL or File handle can just be returned for
  * certain resources. The actual behavior is implementation-specific.
  *
+ * Resource接口抽象了所有Spring内部使用到的底层资源:File、URL、Classpath 首先,
+ * 它定义了3个判断当前资源状态的方法：存在性(exists)、可读性(isReadable)、是否处于打
+ * 开状态(isOpen). 另外, Resource接口还提供了不同资源到URL、URI、File类型的转换，以
+ * 及获取lastModified属性、文件名(不带路径信息的文件名, getFilename())的方法. 为了便于
+ * 操作, Resource还提供了基于当前资源创建一个相对资惊的方法: createRelative(), 在错误处
+ * 理中需要详细地打印出锚的资源文件, 因而Resource还提供了getDescription()方法用来在错
+ * 误处理中打印信息
+ *
  * @author Juergen Hoeller
  * @since 28.12.2003
  * @see #getInputStream()
@@ -142,13 +150,17 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Determine the last-modified timestamp for this resource.
+	 * 确定此资源的上次修改时间戳。
 	 * @throws IOException if the resource cannot be resolved
+	 * 如果无法解析资源，则引发@throws IOException
 	 * (in the file system or as some other known physical resource type)
+	 * 在文件系统中或作为其他已知的物理资源类型
 	 */
 	long lastModified() throws IOException;
 
 	/**
 	 * Create a resource relative to this resource.
+	 * 创建与此资源相关的资源。
 	 * @param relativePath the relative path (relative to this resource)
 	 * @return the resource handle for the relative resource
 	 * @throws IOException if the relative resource cannot be determined
@@ -166,9 +178,13 @@ public interface Resource extends InputStreamSource {
 
 	/**
 	 * Return a description for this resource,
+	 * 返回此资源的说明，
 	 * to be used for error output when working with the resource.
+	 * 用于处理资源时的错误输出。
 	 * <p>Implementations are also encouraged to return this value
+	 * 还鼓励实现返回此值
 	 * from their {@code toString} method.
+	 * 从他们的{@code toString}方法。
 	 * @see Object#toString()
 	 */
 	String getDescription();

@@ -35,12 +35,17 @@ import org.springframework.util.StringUtils;
 
 /**
  * {@link Resource} implementation for {@code java.io.File} handles.
+ * {@link Resource}实现{@code java.io.File}句柄。
  * Supports resolution as a {@code File} and also as a {@code URL}.
+ * 支持解析为{@code File}和{@code URL}。
  * Implements the extended {@link WritableResource} interface.
+ * 实现扩展的{@link WritableResource}接口。
  *
  * <p>Note: As of Spring Framework 5.0, this {@link Resource} implementation
  * uses NIO.2 API for read/write interactions. Nevertheless, in contrast to
  * {@link PathResource}, it primarily manages a {@code java.io.File} handle.
+ *
+ * getInputStream()方法直接使用FileInputStream对文件进行实例化
  *
  * @author Juergen Hoeller
  * @since 28.12.2003

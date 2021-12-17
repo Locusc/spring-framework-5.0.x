@@ -95,6 +95,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		this.readerContext = readerContext;
 		logger.debug("Loading bean definitions");
 		Element root = doc.getDocumentElement();
+		// 真正开始解析XML
 		doRegisterBeanDefinitions(root);
 	}
 
@@ -118,6 +119,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 
 	/**
 	 * Register each bean definition within the given root {@code <beans/>} element.
+	 * 在给定的根{@code<beans/>}元素中注册每个bean定义。
 	 */
 	protected void doRegisterBeanDefinitions(Element root) {
 		// Any nested <beans> elements will cause recursion in this method. In
@@ -126,10 +128,19 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// the new (child) delegate with a reference to the parent for fallback purposes,
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
+		//任何嵌套的<beans>元素都将导致此方法中的递归。在里面
+		//为了正确传播和保留<beans>default-*属性，
+		//跟踪当前（父）委托，该委托可能为空。创造
+		//新的（子）委托，该委托引用父代用于回退，
+		//然后最终重置这个。委托回其原始（父）引用。
+		//此行为模拟代理堆栈，而实际上不需要代理堆栈。
+
+		// 专门处理解析
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
 		if (this.delegate.isDefaultNamespace(root)) {
+			// 处理profile属性
 			String profileSpec = root.getAttribute(PROFILE_ATTRIBUTE);
 			if (StringUtils.hasText(profileSpec)) {
 				String[] specifiedProfiles = StringUtils.tokenizeToStringArray(
@@ -144,8 +155,14 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			}
 		}
 
+		// 解析前处理, 留给子类实现
+		// 空方法 模板方法模式
+		// 如果继承自DefaultBeanDefinitionDocumentReader的子类需要
+		// 在Bean解析前后做一些处理, 只需要重写这两个方法
 		preProcessXml(root);
+
 		parseBeanDefinitions(root, this.delegate);
+		// 解析后处理, 留给子类实现
 		postProcessXml(root);
 
 		this.delegate = parent;

@@ -30,10 +30,14 @@ import org.springframework.util.StringUtils;
 /**
  * {@link Resource} implementation for class path resources. Uses either a
  * given {@link ClassLoader} or a given {@link Class} for loading resources.
+ * {@link Resource}类路径资源的实现。用于加载资源的给定{@link ClassLoader}或给定{@link Class}。
  *
  * <p>Supports resolution as {@code java.io.File} if the class path
  * resource resides in the file system, but not for resources in a JAR.
  * Always supports resolution as URL.
+ *
+ * 以getInputStream为例, ClassPathResource中的实现方式便是通过class或者classLoader
+ * 提供的底层方法进行调用
  *
  * @author Juergen Hoeller
  * @author Sam Brannen
