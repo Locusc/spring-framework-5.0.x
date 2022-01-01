@@ -1,10 +1,10 @@
 package cn.locusc.chapter2.code;
 
 import org.junit.Test;
+import org.springframework.beans.BeanMetadataAttributeAccessor;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionReader;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.*;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -33,6 +33,7 @@ public class BeanFactoryTest {
         ClassPathResource classPathResource = new ClassPathResource("cn.locusc\\beanFactoryTest.xml");
         BeanFactory xmlBeanFactory = new XmlBeanFactory(classPathResource);
         MyTestBean myTestBean = (MyTestBean) xmlBeanFactory.getBean("aliasMyTestBean");
+
 
 		URL url = classPathResource.getURL();
 		String path = url.getPath();
