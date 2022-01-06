@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<!--实现的功能是对HelloBean自动寻找对应的构造函数-->
+	<!--并在初始化的时候将设置的参数传入进去-->
+	<bean id="helloBean" class="cn.locusc.chapter3.code.HelloBean" >
+		<constructor-arg index="0" value="JAY"/>
+		<constructor-arg index="1" value="Hello"/>
+	</bean>
+</beans>

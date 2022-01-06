@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<bean id="p1" class="cn.locusc.chapter3.code.HelloBean">
+		<property name="list">
+			<list>
+				<value>aa</value>
+				<value>bb</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="p2" class="cn.locusc.chapter3.code.HelloBean">
+		<property name="name" value="aaa"/>
+	</bean>
+
+</beans>

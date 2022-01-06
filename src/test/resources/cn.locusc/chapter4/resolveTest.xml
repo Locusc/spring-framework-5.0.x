@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:myname="http://www.lexueba.com/scheme/user"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.lexueba.com/scheme/user http://www.lexueba.com/scheme/user.xsd"
+>
+	<!--	6.创建测试配置文件, 在配置文件中引入对应的命名空间以及XSD后	-->
+	<!--	便可以直接使用自定义标签了	-->
+	<!--	可以注册多个标签解析器	-->
+	<!--	命名空间处理器可以根据标签的不同来调用不同的解析器进行解析	-->
+	<myname:user id="testBean" userName="aaa" email="bbb"/>
+
+</beans>

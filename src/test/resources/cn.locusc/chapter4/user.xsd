@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.lexueba.com/scheme/user"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	   targetNamespace="http://www.lexueba.com/scheme/user"
+		elementFormDefault="qualified"
+>
+	<!--	这3个类用于验证Spring配置文件中自定义格式	-->
+	<!--	XSD文件是XML DTD的替代者, 使用XML Schema语言进行编写	-->
+	<xsd:element name="user">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:string"/>
+			<xsd:attribute name="userName" type="xsd:string"/>
+			<xsd:attribute name="email" type="xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

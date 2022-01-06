@@ -66,10 +66,18 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	/**
 	 * Parses the supplied {@link Element} by delegating to the {@link BeanDefinitionParser} that is
 	 * registered for that {@link Element}.
+	 *
+	 * 通过将委托给{@link BeanDefinitionParser}来解析提供的{@link Element}
+	 * 该{@link BeanDefinitionParser}是已为该{@link Element}注册。
+	 *
+	 * 解析过程中首先是寻找元素对应的解析器, 进而调用解析器的parse方法
+	 * 首先是获取在MyNameSpaceHandler类中的init方法中注册的对应的
+	 * UserBeanDefinitionParser实例, 并调用其parse方法进行进一步解析
 	 */
 	@Override
 	@Nullable
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
+		// 寻找解析器并进行解析操作
 		BeanDefinitionParser parser = findParserForElement(element, parserContext);
 		return (parser != null ? parser.parse(element, parserContext) : null);
 	}
@@ -80,7 +88,11 @@ public abstract class NamespaceHandlerSupport implements NamespaceHandler {
 	 */
 	@Nullable
 	private BeanDefinitionParser findParserForElement(Element element, ParserContext parserContext) {
+		// 获取元素名称, 也就是<myname:user中的user, 此时的localName为user
 		String localName = parserContext.getDelegate().getLocalName(element);
+		// 根据user找到对应的解析器, 也就是
+		// registerBeanDefinitionParser("user", new UserDefinitionParser());
+		// 注册的解析器
 		BeanDefinitionParser parser = this.parsers.get(localName);
 		if (parser == null) {
 			parserContext.getReaderContext().fatal(

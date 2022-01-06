@@ -167,6 +167,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/** List of bean definition names, in registration order */
 	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);
 
+	// 按注册顺序手动注册的单例列表
 	/** List of names of manually registered singletons, in registration order */
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<>(16);
 
@@ -784,6 +785,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	// Implementation of BeanDefinitionRegistry interface
 	//---------------------------------------------------------------------
 
+	/**
+	 * 1.此时的校验是针对于AbstractBeanDefinition的methodOverrides属性
+	 * 2.对beanName已经注册的情况的处理, 如果设置了不允许bena的覆盖
+	 * 	 则抛出异常
+	 * 3.加入map缓存
+	 * 4.清除解析之前留下的对应的beanName缓存
+	 */
 	@Override
 	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
 			throws BeanDefinitionStoreException {
@@ -793,6 +801,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
+				/**
+				 * 注册前的最后一次校验, 这里校验不同于之前的XML文件校验
+				 * 主要是对于AbstractBeanDefinition属性中的methodOverrides校验
+				 * 校验methodOverrides是否与工厂方法并存
+				 * 或者methodOverrides对应的方法根本不存在
+				 */
 				((AbstractBeanDefinition) beanDefinition).validate();
 			}
 			catch (BeanDefinitionValidationException ex) {
@@ -802,7 +816,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
+		// 处理注册已经被注册的beanName情况
 		if (existingDefinition != null) {
+			// 如果对应的BeanName已经被注册且在配置中配置了bean不允许被覆盖, 则抛出异常
 			if (!isAllowBeanDefinitionOverriding()) {
 				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
 						"Cannot register bean definition [" + beanDefinition + "] for bean '" + beanName +
@@ -833,9 +849,17 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 		else {
+			// 其实hasBeanCreationStarted主要是判断是不是已经有bean被创建了
+			// 这里如果已经存在bean的创建, 那么代表我们已经开始进行了业务操作
+			// Spring容器无法保证使用者是在线程安全的情况下调用了,
+			// 也就是无法保证下面的代码不会出现线程安全问题, 所以需要加锁
 			if (hasBeanCreationStarted()) {
+				// 因为beanDefinitionMap是全局变量
+				// 这里肯定会存在并发访问的情况
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
+				// 无法再修改启动时间集合元素（用于稳定迭代）
 				synchronized (this.beanDefinitionMap) {
+					//注册beanDefinition
 					this.beanDefinitionMap.put(beanName, beanDefinition);
 					List<String> updatedDefinitions = new ArrayList<>(this.beanDefinitionNames.size() + 1);
 					updatedDefinitions.addAll(this.beanDefinitionNames);
@@ -850,14 +874,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			else {
 				// Still in startup registration phase
+				// 仍处于启动注册阶段
 				this.beanDefinitionMap.put(beanName, beanDefinition);
+				// 记录bean的名称
 				this.beanDefinitionNames.add(beanName);
 				this.manualSingletonNames.remove(beanName);
 			}
 			this.frozenBeanDefinitionNames = null;
 		}
 
+		// 需要重置BeanDefinition，
+		// 当前注册的bean的定义已经在beanDefinitionMap缓存中存在，
+		// 或者其实例已经存在于单例bean的缓存中
 		if (existingDefinition != null || containsSingleton(beanName)) {
+			// 重置所有的beanName对应的缓存
 			resetBeanDefinition(beanName);
 		}
 		else if (isConfigurationFrozen()) {
@@ -897,6 +927,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/**
 	 * Reset all bean definition caches for the given bean,
 	 * including the caches of beans that are derived from it.
+	 * 重置给定bean的所有bean定义缓存, 包括从中派生的bean的缓存.
+	 *
 	 * @param beanName the name of the bean to reset
 	 */
 	protected void resetBeanDefinition(String beanName) {
