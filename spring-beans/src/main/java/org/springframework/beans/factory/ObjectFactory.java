@@ -22,8 +22,15 @@ import org.springframework.beans.BeansException;
  * Defines a factory which can return an Object instance
  * (possibly shared or independent) when invoked.
  *
+ * 定义可以返回对象实例的工厂
+ * (可能是共享的或独立的)调用时。
+ *
+ *
+ *
  * <p>This interface is typically used to encapsulate a generic factory which
  * returns a new instance (prototype) of some target object on each invocation.
+ * <p>此接口通常用于封装通用工厂 在每次调用时返回某个目标对象的新实例（原型）。
+ *
  *
  * <p>This interface is similar to {@link FactoryBean}, but implementations
  * of the latter are normally meant to be defined as SPI instances in a
@@ -41,6 +48,9 @@ public interface ObjectFactory<T> {
 	/**
 	 * Return an instance (possibly shared or independent)
 	 * of the object managed by this factory.
+	 * 返回一个实例（可能是共享的或独立的）
+	 * 此工厂管理的对象的。
+	 *
 	 * @return the resulting instance
 	 * @throws BeansException in case of creation errors
 	 */

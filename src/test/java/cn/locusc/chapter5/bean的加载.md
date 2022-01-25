@@ -48,4 +48,64 @@
 的配置信息, 配置方式的灵活性是受限的, 这时候Spring为此提供了一个
 org.springframework.beans.factory.FactoryBean(3.0开始支持泛型)
 的工厂类接口, 可以通过实现该接口定制实例化bean的逻辑
+
+cn.locusc.chapter5.code.test.Chapter5Test.fbTest
+当调用getBean("car")时, Spring通过反射机制发现CarFactoryBean的接口
+这是Spring的容器就调用方法CarFactoryBean#getObject()方法返回, 如果
+希望获取CarFactoryBean的实例, 则需要再使用getBean(beanName)前显示的加上
+"&"前缀, 例如getBean("&car")
+
+
+5.2缓存中获取单例的bean
+单例在Spring的同一个容器内只会被创建一次, 后续再获取bean直接从单例缓存中获取,
+这里只是尝试加载, 首先尝试从缓存中加载, 然后再次尝试从singletonFactories中加载
+因为在创建单例bean的时候会存在依赖注入的情况, 而在创建依赖的时候为了避免循环依赖,
+Spring创建bean的原则是不等bean创建完成就会将创建bean的ObjectFactory提前曝光
+加入到缓存中, 一旦下一个bean创建时需要依赖上一个bean, 则直接使用ObjectFactory
+DefaultSingletonBeanRegistry.getSingleton(java.lang.String, boolean)
+
+
+5.3从bean的实例中获取对象
+在getBean方法中, getObjectForBeanInstance是个高频率使用的方法, 
+无论是从缓存中获得bean还是根据不同的scope策略加载bean. 总之, 得到
+bean的实例后要做的第一步就是调用这个方法来检测一下正确性, 其实就是用于
+检测当前的bean是否是FactoryBean类型的bean, 如果是, 那么需要调用该bean
+对应的FactoryBean实例中的getObject()作为返回值
+
+无论是从缓存中获取到的bean还是通过不同的scope策略加载的bean都只是最原始的
+bean, 并不一定是我们最终想要的bean
+举个例子, 假如我们需要对工厂bean进行处理, 那么这里得到的其实是工厂bean的初始状态
+但是我们真正需要的是工厂bean中定义的factory-method方法中返回的bean,
+而getObjectForBeanInstance方法就是完成这个工作的
+
+如果bean声明为FactoryBean类型, 则当提取bean时提取的并不是FactoryBean
+而是FactoryBean中对应的getObject方法返回的bean
+而doGetObjectFromFactoryBean正是实现这个功能的
+
+5.4获取单例
+在5.2中从缓存获取单例的bean, 那么如果缓存中不存在已经加载的单例bean就需要从头开始
+bean的加载过程了, 在Spring是使用getSingleton的重载方法是实现bean的加载过程
+ObjectFactory的核心部分其实只是调用了createBean的方法
+DefaultSingletonBeanRegistry.getSingleton(java.lang.String, org.springframework.beans.factory.ObjectFactory<?>)
+
+5.5准备创建bean
+Spring的函数有一些规律, 一个真正干活的函数其实是以do开头的,
+比如doGetObjectFromFactoryBean; 而一些会误以为是在真正处理的函数
+比如getObjectFromFactoryBean, 其实只是从全局角度去做些统筹的工作
+这个规则对于createBean也不例外
+AbstractAutowireCapableBeanFactory.createBean(java.lang.String, org.springframework.beans.factory.support.RootBeanDefinition, java.lang.Object[])
+5.5.1处理override属性
+AbstractBeanDefinition.prepareMethodOverrides
+5.5.2实例化的前置处理
+在真正调用doCreate方法创建bean的实例前使用了这样一个方法
+AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation
+对BeanDefinition中的属性做些前置处理, 无论其中是否有对应的逻辑实现我们
+都可以理解, 因为真正逻辑实现前后留有处理函数也是可扩展的一种体现,
+但更重要的是函数还提供了一个短路判断, 这才是最为关键的地方
+    1.实例化前的后处理器应用
+    AbstractAutowireCapableBeanFactory
+    .applyBeanPostProcessorsBeforeInstantiation
+    2.实例化后的后处理器应用
+    AbstractAutowireCapableBeanFactory
+    .applyBeanPostProcessorsAfterInitialization
 ```
