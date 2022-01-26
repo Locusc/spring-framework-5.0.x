@@ -108,4 +108,15 @@ AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation
     2.实例化后的后处理器应用
     AbstractAutowireCapableBeanFactory
     .applyBeanPostProcessorsAfterInitialization
+
+
+5.6循环依赖
+实例化bean是一个复杂的过程, 其中循环依赖是其中最重要的一点
+5.6.1什么是循环依赖
+循环依赖就是循环引用, 就是两个或多个bean相互之间的持有对方, 比如CircleA引用
+CircleB, CircleB引用CircleC, CircleC引用CircleA, 则它们最终反映为一个环,
+此处不是循环调用, 循环调用是方法之间的环调用(循环调用是无法解决的, 除非有终结条件,
+否则就是死循环, 最终导致内存溢出错误, 其实就是递归)
+5.6.2Spring如何解决循环依赖
+spring容器循环依赖包括构造器循环依赖和setter循环依赖
 ```
