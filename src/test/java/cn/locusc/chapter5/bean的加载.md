@@ -119,4 +119,5 @@ CircleB, CircleB引用CircleC, CircleC引用CircleA, 则它们最终反映为一
 否则就是死循环, 最终导致内存溢出错误, 其实就是递归)
 5.6.2Spring如何解决循环依赖
 spring容器循环依赖包括构造器循环依赖和setter循环依赖
+cn.locusc.chapter5.code.circle.CirCleTest
 ```
