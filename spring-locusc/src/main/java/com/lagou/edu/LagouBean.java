@@ -11,6 +11,12 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class LagouBean implements InitializingBean, ApplicationContextAware {
 
+	private ItBean itBean;
+
+	public void setItBean(ItBean itBean) {
+		this.itBean = itBean;
+	}
+
 	/**
 	 * 构造函数
 	 */
