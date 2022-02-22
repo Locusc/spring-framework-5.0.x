@@ -1,4 +1,4 @@
-package com.lagou.edu;
+package cn.locusc.ioc.aop;
 
 /**
  * @author 应癫

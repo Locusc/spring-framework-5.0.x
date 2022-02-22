@@ -10,30 +10,30 @@
 ">
 
 	<!--循环依赖问题-->
-	<bean id="lagouBean" class="com.lagou.edu.LagouBean">
+	<bean id="lagouBean" class="cn.locusc.ioc.aop.LagouBean">
 		<property name="ItBean" ref="itBean"/>
 	</bean>
-	<bean id="itBean" class="com.lagou.edu.ItBean">
+	<bean id="itBean" class="cn.locusc.ioc.aop.ItBean">
 		<property name="LagouBean" ref="lagouBean"/>
 	</bean>
 
 
-	<!--<bean id="myBeanFactoryPostProcessor" class="com.lagou.edu.MyBeanFactoryPostProcessor"/>
-	<bean id="myBeanPostProcessor" class="com.lagou.edu.MyBeanPostProcessor"/>-->
+	<!--<bean id="myBeanFactoryPostProcessor" class="MyBeanFactoryPostProcessor"/>
+	<bean id="myBeanPostProcessor" class="MyBeanPostProcessor"/>-->
 
 
-	<!--<bean id="lagouBean" class="com.lagou.edu.LagouBean">
+	<!--<bean id="lagouBean" class="LagouBean">
 	</bean>-->
 
 
 	<!--aop配置-->
 	<!--横切逻辑-->
-	<!--<bean id="logUtils" class="com.lagou.edu.LogUtils">
+	<!--<bean id="logUtils" class="LogUtils">
 	</bean>
 
 	<aop:config>
 		<aop:aspect ref="logUtils">
-			<aop:before method="beforeMethod" pointcut="execution(public void com.lagou.edu.LagouBean.print())"/>
+			<aop:before method="beforeMethod" pointcut="execution(public void LagouBean.print())"/>
 		</aop:aspect>
 	</aop:config>-->
 

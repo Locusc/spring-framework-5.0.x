@@ -502,6 +502,11 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	/**
 	 * Determine the advisors for the given bean, including the specific interceptors
 	 * as well as the common interceptor, all adapted to the Advisor interface.
+	 *
+	 * 确定给定bean的顾问, 包括特定的拦截器以及通用拦截器, 所有这些都适用于Advisor接口.
+	 *
+	 * spring在这里将特定的拦截器(advice)aop的增强方法和通用拦截器
+	 *
 	 * @param beanName the name of the bean
 	 * @param specificInterceptors the set of interceptors that is
 	 * specific to this bean (may be empty, but not null)

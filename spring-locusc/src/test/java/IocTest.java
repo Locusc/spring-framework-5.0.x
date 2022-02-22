@@ -1,4 +1,4 @@
-import com.lagou.edu.LagouBean;
+import cn.locusc.ioc.aop.LagouBean;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -28,4 +28,15 @@ public class IocTest {
 		LagouBean lagouBean = applicationContext.getBean(LagouBean.class);
 		System.out.println(lagouBean);
 	}
+
+	/**
+	 *  Ioc 容器源码分析基础案例
+	 */
+	@Test
+	public void testAOP() {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		LagouBean lagouBean = applicationContext.getBean(LagouBean.class);
+		lagouBean.print();
+	}
+
 }

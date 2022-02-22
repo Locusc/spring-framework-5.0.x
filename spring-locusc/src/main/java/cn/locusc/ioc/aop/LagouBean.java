@@ -1,4 +1,4 @@
-package com.lagou.edu;
+package cn.locusc.ioc.aop;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
